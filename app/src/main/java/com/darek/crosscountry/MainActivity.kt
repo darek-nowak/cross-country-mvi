@@ -26,9 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.darek.crosscountry.ui.CountriesViewModel
+import com.darek.crosscountry.ui.countries.CountriesScreen
 import com.darek.crosscountry.ui.theme.CrossCountryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -80,7 +83,7 @@ fun CrossCountryApp() {
         )
         {
             composable(AppDestinations.HOME.name) {
-                Screen("Home")
+                CountriesScreen()
             }
             composable(AppDestinations.FAVORITES.name) {
                 Screen("Favorites")

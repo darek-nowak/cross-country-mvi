@@ -1,6 +1,7 @@
 package com.darek.crosscountry.di
 
 import com.darek.crosscountry.data.CountriesApi
+import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -11,6 +12,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 @InstallIn(SingletonComponent::class)
+@Module
 class NetworkModule {
 
     @Provides
