@@ -16,7 +16,7 @@ internal interface CountriesApi {
     @GET("v3.1/name/{name}")
     suspend fun getCountry(
         @Path("name") name: String,
-        @Query("fields") fields: String = "name,capital,population,area,continents,flag"
+        @Query("fields") fields: String = "name,capital,population,area,continents,flag,timezones,languages,car"
     ): List<CountryInfoResponse>
 }
 
