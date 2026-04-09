@@ -26,12 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.darek.crosscountry.ui.CountriesViewModel
+import androidx.navigation.navArgument
 import com.darek.crosscountry.ui.countries.CountriesScreen
+import com.darek.crosscountry.ui.countries.CountryInfoScreen
 import com.darek.crosscountry.ui.theme.CrossCountryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -83,7 +84,18 @@ fun CrossCountryApp() {
         )
         {
             composable(AppDestinations.HOME.name) {
-                CountriesScreen()
+                CountriesScreen(
+                    onCountryClick = { country ->
+                        navController.navigate("countryInfo/$country")
+                    }
+                )
+            }
+            composable(
+                "countryInfo/{country}",
+                arguments = listOf(navArgument("country") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val country = backStackEntry.arguments?.getString("country") ?: ""
+                CountryInfoScreen(country)
             }
             composable(AppDestinations.FAVORITES.name) {
                 Screen("Favorites")

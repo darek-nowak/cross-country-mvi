@@ -15,7 +15,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 @InstallIn(SingletonComponent::class)
 @Module
-class NetworkModule {
+internal class NetworkModule {
 
     @Provides
     @Singleton

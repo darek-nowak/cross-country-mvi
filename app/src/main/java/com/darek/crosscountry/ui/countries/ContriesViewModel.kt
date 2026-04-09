@@ -1,10 +1,9 @@
-package com.darek.crosscountry.ui
+package com.darek.crosscountry.ui.countries
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.darek.crosscountry.data.CountriesRepository
-import com.darek.crosscountry.data.Country
-import com.darek.crosscountry.data.CountryResponse
+import com.darek.crosscountry.data.models.Country
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
