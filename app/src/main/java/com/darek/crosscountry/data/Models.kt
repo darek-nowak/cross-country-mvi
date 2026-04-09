@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class Country(
+data class CountryResponse(
     val name: CountryName,
     val capital: List<String>?, // Capital is returned as a list of strings
     val flag: String
@@ -12,6 +12,17 @@ data class Country(
 
 @Serializable
 data class CountryName(
-    val common: String,
-    val official: String
+    val common: String
+)
+
+internal fun CountryResponse.toCountry() = Country(
+    name = name.common,
+    capital = capital?.firstOrNull() ?: "Unknown",
+    flag = flag
+)
+
+internal data class Country(
+    val name: String,
+    val capital: String,
+    val flag: String
 )

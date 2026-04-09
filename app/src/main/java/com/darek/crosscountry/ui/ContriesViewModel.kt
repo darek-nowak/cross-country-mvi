@@ -4,12 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.darek.crosscountry.data.CountriesRepository
 import com.darek.crosscountry.data.Country
+import com.darek.crosscountry.data.CountryResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,8 +18,7 @@ sealed class CountriesIntent {
     object FetchCountries : CountriesIntent()
 }
 
-
-sealed class UiCountriesState {
+internal sealed class UiCountriesState {
     object Loading : UiCountriesState()
     data class Success(val countries: List<Country>) : UiCountriesState()
     object Error : UiCountriesState()
@@ -28,7 +26,7 @@ sealed class UiCountriesState {
 
 
 @HiltViewModel
-class CountriesViewModel @Inject constructor(
+internal class CountriesViewModel @Inject constructor(
     private val countriesRepository: CountriesRepository
 ) : ViewModel() {
 
@@ -44,10 +42,13 @@ class CountriesViewModel @Inject constructor(
 
     private fun fetchCountries() {
         _uiState.value = UiCountriesState.Loading
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             runCatching { countriesRepository.getCountries() }
                 .onSuccess { _uiState.value = UiCountriesState.Success(it) }
-                .onFailure { _uiState.value = UiCountriesState.Error }
+                .onFailure {
+                    println("Error fetching countries: ${it.message}")
+                    _uiState.value = UiCountriesState.Error
+                }
         }
     }
 }
