@@ -1,4 +1,4 @@
-package com.darek.crosscountry
+package com.darek.crosscountry.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

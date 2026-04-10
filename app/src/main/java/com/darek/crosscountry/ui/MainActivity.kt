@@ -1,4 +1,4 @@
-package com.darek.crosscountry
+package com.darek.crosscountry.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
