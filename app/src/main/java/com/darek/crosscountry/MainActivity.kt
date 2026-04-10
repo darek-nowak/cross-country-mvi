@@ -26,9 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.darek.crosscountry.ui.countries.CountriesScreen
@@ -53,24 +55,31 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CrossCountryApp() {
     val navController = rememberNavController()
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
-                AppDestinations.entries.forEach {
+                AppDestinations.entries.forEach { destination ->
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                it.icon,
-                                contentDescription = it.label
+                                destination.icon,
+                                contentDescription = destination.label
                             )
                         },
-                        label = { Text(it.label) },
-                        selected = it == currentDestination,
+                        label = { Text(destination.label) },
+                        selected = currentRoute == destination.name,
                         onClick = {
-                            currentDestination = it
-                            navController.navigate(it.name)
+                            navController.navigate(destination.name) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
                     )
                 }

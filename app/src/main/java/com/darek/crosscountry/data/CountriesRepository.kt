@@ -11,9 +11,12 @@ import javax.inject.Singleton
 internal class CountriesRepository @Inject constructor(
     private val countriesApi: CountriesApi
 ) {
+    private var cachedCountries: List<Country>? = null
+
     suspend fun getCountries(): List<Country> {
-        return countriesApi.getCountries()
+        return cachedCountries ?: countriesApi.getCountries()
             .map { it.toCountry() }
+            .also { cachedCountries = it }
     }
 
     suspend fun getCountry(countryName: String): CountryInfo =
