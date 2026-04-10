@@ -8,14 +8,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,6 +39,10 @@ import com.darek.crosscountry.ui.countries.CountryInfoScreen
 import com.darek.crosscountry.ui.theme.CrossCountryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val COUNTRY_INFO_ROUTE = "countryInfo/{country}"
+private const val COUNTRY_INFO_ARGUMENT = "country"
+private const val COUNTRY_INFO_TITLE = "Country details"
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,37 +56,56 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @PreviewScreenSizes
 @Composable
 fun CrossCountryApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val onCountryDetailsScreen = currentRoute == COUNTRY_INFO_ROUTE
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        bottomBar = {
-            NavigationBar {
-                AppDestinations.entries.forEach { destination ->
-                    NavigationBarItem(
-                        icon = {
+        topBar = {
+            if (onCountryDetailsScreen) {
+                TopAppBar(
+                    title = { Text(COUNTRY_INFO_TITLE) },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
-                                destination.icon,
-                                contentDescription = destination.label
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Navigate back"
                             )
-                        },
-                        label = { Text(destination.label) },
-                        selected = currentRoute == destination.name,
-                        onClick = {
-                            navController.navigate(destination.name) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
                         }
-                    )
+                    }
+                )
+            }
+        },
+        bottomBar = {
+            if (!onCountryDetailsScreen) {
+                NavigationBar {
+                    AppDestinations.entries.forEach { destination ->
+                        NavigationBarItem(
+                            icon = {
+                                Icon(
+                                    destination.icon,
+                                    contentDescription = destination.label
+                                )
+                            },
+                            label = { Text(destination.label) },
+                            selected = currentRoute == destination.name,
+                            onClick = {
+                                navController.navigate(destination.name) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -92,15 +119,15 @@ fun CrossCountryApp() {
             composable(AppDestinations.HOME.name) {
                 CountriesScreen(
                     onCountryClick = { country ->
-                        navController.navigate("countryInfo/$country")
+                        navController.navigate(COUNTRY_INFO_ROUTE.replace("{$COUNTRY_INFO_ARGUMENT}", country))
                     }
                 )
             }
             composable(
-                "countryInfo/{country}",
-                arguments = listOf(navArgument("country") { type = NavType.StringType })
+                COUNTRY_INFO_ROUTE,
+                arguments = listOf(navArgument(COUNTRY_INFO_ARGUMENT) { type = NavType.StringType })
             ) { backStackEntry ->
-                val country = backStackEntry.arguments?.getString("country") ?: ""
+                val country = backStackEntry.arguments?.getString(COUNTRY_INFO_ARGUMENT) ?: ""
                 CountryInfoScreen(country)
             }
             composable(AppDestinations.FAVORITES.name) {
