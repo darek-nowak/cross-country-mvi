@@ -14,7 +14,6 @@ import javax.inject.Inject
 
 sealed class CountriesIntent {
     object ScreenReady : CountriesIntent()
-    object FetchCountries : CountriesIntent()
 }
 
 internal sealed class UiCountriesState {
@@ -35,7 +34,6 @@ internal class CountriesViewModel @Inject constructor(
     fun sendIntent(intent: CountriesIntent) {
         when (intent) {
             is CountriesIntent.ScreenReady -> fetchCountries()
-            is CountriesIntent.FetchCountries -> fetchCountries()
         }
     }
 
