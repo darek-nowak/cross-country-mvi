@@ -8,19 +8,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class CountriesRepository @Inject constructor(
-    private val countriesApi: CountriesApi
-) {
-    private var cachedCountries: List<Country>? = null
+internal class CountriesRepository
+    @Inject
+    constructor(
+        private val countriesApi: CountriesApi,
+    ) {
+        private var cachedCountries: List<Country>? = null
 
-    suspend fun getCountries(): List<Country> {
-        return cachedCountries ?: countriesApi.getCountries()
-            .map { it.toCountry() }
-            .also { cachedCountries = it }
+        suspend fun getCountries(): List<Country> {
+            return cachedCountries ?: countriesApi.getCountries()
+                .map { it.toCountry() }
+                .also { cachedCountries = it }
+        }
+
+        suspend fun getCountry(countryName: String): CountryInfo =
+            countriesApi.getCountry(name = countryName)
+                .first()
+                .toCountryInfo()
     }
-
-    suspend fun getCountry(countryName: String): CountryInfo =
-        countriesApi.getCountry(name = countryName)
-            .first()
-            .toCountryInfo()
-}

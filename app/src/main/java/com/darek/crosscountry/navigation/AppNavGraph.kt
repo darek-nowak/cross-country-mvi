@@ -23,13 +23,13 @@ fun AppNavGraph(
     NavHost(
         navController = navController,
         startDestination = Home,
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable<Home> {
             CountriesScreen(
                 onCountryClick = { countryName ->
                     navController.navigate(route = CountryInfo(countryName))
-                }
+                },
             )
         }
         composable<CountryInfo> { backStackEntry ->
@@ -47,12 +47,16 @@ fun AppNavGraph(
 }
 
 @Composable
-fun Screen(name: String, modifier: Modifier = Modifier) {
+fun Screen(
+    name: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = "Hello at screen $name!",
-        modifier = modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center),
     )
 }
 
@@ -63,4 +67,3 @@ fun ScreenPreview() {
         Screen("Android")
     }
 }
-

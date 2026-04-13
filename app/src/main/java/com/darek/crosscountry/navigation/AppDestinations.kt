@@ -7,15 +7,17 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavOptionsBuilder
 import kotlinx.serialization.Serializable
-import androidx.navigation.NavDestination.Companion.hasRoute
-
 
 // Type-safe route objects for all top-level destinations
 @Serializable data object Home
+
 @Serializable data object Favorites
+
 @Serializable data object Profile
+
 @Serializable
 data class CountryInfo(val countryName: String)
 
@@ -25,10 +27,14 @@ enum class AppDestinations(
 ) {
     HOME("Home", Icons.Default.Home),
     FAVORITES("Favorites", Icons.Default.Favorite),
-    PROFILE("Profile", Icons.Default.AccountBox);
+    PROFILE("Profile", Icons.Default.AccountBox),
+    ;
 
     // Navigates to the type-safe route corresponding to this bottom-nav destination
-    fun navigate(navController: NavController, builder: NavOptionsBuilder.() -> Unit) {
+    fun navigate(
+        navController: NavController,
+        builder: NavOptionsBuilder.() -> Unit,
+    ) {
         when (this) {
             HOME -> navController.navigate(Home, builder)
             FAVORITES -> navController.navigate(Favorites, builder)
@@ -37,10 +43,10 @@ enum class AppDestinations(
     }
 
     // Returns true when this destination matches the current back-stack entry
-    fun isSelected(destination: NavDestination?): Boolean = when (this) {
-        HOME -> destination?.hasRoute<Home>() == true
-        FAVORITES -> destination?.hasRoute<Favorites>() == true
-        PROFILE -> destination?.hasRoute<Profile>() == true
-    }
+    fun isSelected(destination: NavDestination?): Boolean =
+        when (this) {
+            HOME -> destination?.hasRoute<Home>() == true
+            FAVORITES -> destination?.hasRoute<Favorites>() == true
+            PROFILE -> destination?.hasRoute<Profile>() == true
+        }
 }
-

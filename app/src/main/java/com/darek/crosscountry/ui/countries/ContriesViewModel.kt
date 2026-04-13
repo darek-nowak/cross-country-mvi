@@ -18,34 +18,36 @@ sealed class CountriesIntent {
 
 internal sealed class UiCountriesState {
     object Loading : UiCountriesState()
+
     data class Success(val countries: List<Country>) : UiCountriesState()
+
     object Error : UiCountriesState()
 }
 
-
 @HiltViewModel
-internal class CountriesViewModel @Inject constructor(
-    private val countriesRepository: CountriesRepository
-) : ViewModel() {
+internal class CountriesViewModel
+    @Inject
+    constructor(
+        private val countriesRepository: CountriesRepository,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow<UiCountriesState>(UiCountriesState.Loading)
+        val uiState: StateFlow<UiCountriesState> = _uiState.asStateFlow()
 
-    val _uiState = MutableStateFlow<UiCountriesState>(UiCountriesState.Loading)
-    val uiState: StateFlow<UiCountriesState> = _uiState.asStateFlow()
+        fun sendIntent(intent: CountriesIntent) {
+            when (intent) {
+                is CountriesIntent.ScreenReady -> fetchCountries()
+            }
+        }
 
-    fun sendIntent(intent: CountriesIntent) {
-        when (intent) {
-            is CountriesIntent.ScreenReady -> fetchCountries()
+        private fun fetchCountries() {
+            _uiState.value = UiCountriesState.Loading
+            viewModelScope.launch(Dispatchers.IO) {
+                runCatching { countriesRepository.getCountries() }
+                    .onSuccess { _uiState.value = UiCountriesState.Success(it) }
+                    .onFailure {
+                        println("Error fetching countries: ${it.message}")
+                        _uiState.value = UiCountriesState.Error
+                    }
+            }
         }
     }
-
-    private fun fetchCountries() {
-        _uiState.value = UiCountriesState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { countriesRepository.getCountries() }
-                .onSuccess { _uiState.value = UiCountriesState.Success(it) }
-                .onFailure {
-                    println("Error fetching countries: ${it.message}")
-                    _uiState.value = UiCountriesState.Error
-                }
-        }
-    }
-}

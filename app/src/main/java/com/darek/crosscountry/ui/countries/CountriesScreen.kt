@@ -26,7 +26,7 @@ import com.darek.crosscountry.ui.theme.CrossCountryTheme
 @Composable
 internal fun CountriesScreen(
     viewModel: CountriesViewModel = hiltViewModel(),
-    onCountryClick: (String) -> Unit = {}
+    onCountryClick: (String) -> Unit = {},
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -34,11 +34,11 @@ internal fun CountriesScreen(
         viewModel.sendIntent(CountriesIntent.ScreenReady)
     }
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         CountriesScreenContent(
             countriesState = uiState.value,
-            onCountryClick = onCountryClick
+            onCountryClick = onCountryClick,
         )
     }
 }
@@ -46,7 +46,7 @@ internal fun CountriesScreen(
 @Composable
 internal fun CountriesScreenContent(
     countriesState: UiCountriesState,
-    onCountryClick: (String) -> Unit = {}
+    onCountryClick: (String) -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         when (countriesState) {
@@ -54,7 +54,7 @@ internal fun CountriesScreenContent(
             is UiCountriesState.Success -> {
                 CountryList(
                     countries = countriesState.countries,
-                    onCountryClick = onCountryClick
+                    onCountryClick = onCountryClick,
                 )
             }
             is UiCountriesState.Error -> ErrorContent()
@@ -66,7 +66,7 @@ internal fun CountriesScreenContent(
 fun LoadingIndicator() {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()
     }
@@ -76,7 +76,7 @@ fun LoadingIndicator() {
 internal fun ErrorContent() {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(text = "Error")
     }
@@ -85,7 +85,7 @@ internal fun ErrorContent() {
 @Composable
 internal fun CountryList(
     countries: List<Country>,
-    onCountryClick: (String) -> Unit = {}
+    onCountryClick: (String) -> Unit = {},
 ) {
     LazyColumn {
         items(countries) { country ->
@@ -97,13 +97,14 @@ internal fun CountryList(
 @Composable
 internal fun CountryItem(
     country: Country,
-    onCountryClick: (String) -> Unit = {}
+    onCountryClick: (String) -> Unit = {},
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onCountryClick(country.name) }
-            .padding(horizontal = 25.dp, vertical = 3.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { onCountryClick(country.name) }
+                .padding(horizontal = 25.dp, vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(text = country.name)
@@ -117,7 +118,7 @@ internal fun CountryItem(
 private fun CountriesScreenContentLoadingPreview() {
     CrossCountryTheme {
         CountriesScreenContent(
-            countriesState = UiCountriesState.Loading
+            countriesState = UiCountriesState.Loading,
         )
     }
 }
@@ -127,13 +128,15 @@ private fun CountriesScreenContentLoadingPreview() {
 private fun CountriesScreenContentSuccessPreview() {
     CrossCountryTheme {
         CountriesScreenContent(
-            countriesState = UiCountriesState.Success(
-                countries = listOf(
-                    Country("Poland", "🇵🇱"),
-                    Country("Germany", "🇩🇪"),
-                    Country("France",  "🇫🇷")
-                )
-            )
+            countriesState =
+                UiCountriesState.Success(
+                    countries =
+                        listOf(
+                            Country("Poland", "🇵🇱"),
+                            Country("Germany", "🇩🇪"),
+                            Country("France", "🇫🇷"),
+                        ),
+                ),
         )
     }
 }
@@ -143,7 +146,7 @@ private fun CountriesScreenContentSuccessPreview() {
 private fun CountriesScreenContentErrorPreview() {
     CrossCountryTheme {
         CountriesScreenContent(
-            countriesState = UiCountriesState.Error
+            countriesState = UiCountriesState.Error,
         )
     }
 }

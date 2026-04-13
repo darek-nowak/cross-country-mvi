@@ -28,7 +28,7 @@ import com.darek.crosscountry.ui.theme.CrossCountryTheme
 @Composable
 internal fun CountryInfoScreen(
     countryName: String,
-    viewModel: CountryInfoViewModel = hiltViewModel()
+    viewModel: CountryInfoViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiCountryInfoState.collectAsStateWithLifecycle()
 
@@ -37,19 +37,17 @@ internal fun CountryInfoScreen(
     }
 
     CountryInfoContent(
-        uiState = uiState
+        uiState = uiState,
     )
 }
 
 @Composable
-internal fun CountryInfoContent(
-    uiState: UiCountryInfoState
-) {
+internal fun CountryInfoContent(uiState: UiCountryInfoState) {
     when (uiState) {
         UiCountryInfoState.Loading -> LoadingIndicator()
         is UiCountryInfoState.Success -> {
             CountryInfoLoadedContent(
-                countryInfo = uiState.countryInfo
+                countryInfo = uiState.countryInfo,
             )
         }
         UiCountryInfoState.Error -> ErrorContent()
@@ -57,43 +55,41 @@ internal fun CountryInfoContent(
 }
 
 @Composable
-internal fun CountryInfoLoadedContent(
-    countryInfo: CountryInfo
-) {
+internal fun CountryInfoLoadedContent(countryInfo: CountryInfo) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(30.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(30.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
         Box(
             modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = countryInfo.flag,
                 fontSize = 150.sp,
-                modifier = Modifier.padding(top = 40.dp)
+                modifier = Modifier.padding(top = 40.dp),
             )
         }
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             Text(
                 modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(),
                 text = countryInfo.name,
                 textAlign = TextAlign.Center,
                 fontSize = 32.sp,
-
             )
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     InfoRow(label = "Capital", value = countryInfo.capital)
                     InfoRow(label = "Continent", value = countryInfo.continent)
@@ -109,10 +105,13 @@ internal fun CountryInfoLoadedContent(
 }
 
 @Composable
-private fun InfoRow(label: String, value: String) {
+private fun InfoRow(
+    label: String,
+    value: String,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(text = label, fontWeight = FontWeight.Bold)
         Text(text = value)
@@ -134,9 +133,9 @@ private fun CountryInfoContentLoadedPreview() {
                     flag = "🇵🇱",
                     timezone = "UTC+01:00",
                     languages = "Polish",
-                    carInfo = "PL, drive on the right"
-                )
-            )
+                    carInfo = "PL, drive on the right",
+                ),
+            ),
         )
     }
 }
@@ -146,7 +145,7 @@ private fun CountryInfoContentLoadedPreview() {
 private fun CountryInfoContentErrorPreview() {
     CrossCountryTheme {
         CountryInfoContent(
-            UiCountryInfoState.Error
+            UiCountryInfoState.Error,
         )
     }
 }
@@ -156,7 +155,7 @@ private fun CountryInfoContentErrorPreview() {
 private fun CountryInfoContentLoadingPreview() {
     CrossCountryTheme {
         CountryInfoContent(
-            UiCountryInfoState.Loading
+            UiCountryInfoState.Loading,
         )
     }
 }

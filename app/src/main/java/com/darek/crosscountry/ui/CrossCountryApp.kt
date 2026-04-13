@@ -42,10 +42,10 @@ fun CrossCountryApp() {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Navigate back"
+                                contentDescription = "Navigate back",
                             )
                         }
-                    }
+                    },
                 )
             }
         },
@@ -57,7 +57,7 @@ fun CrossCountryApp() {
                             icon = {
                                 Icon(
                                     destination.icon,
-                                    contentDescription = destination.label
+                                    contentDescription = destination.label,
                                 )
                             },
                             label = { Text("Country details") },
@@ -70,17 +70,16 @@ fun CrossCountryApp() {
                                     launchSingleTop = true
                                     restoreState = true
                                 }
-                            }
+                            },
                         )
                     }
                 }
             }
-        }
+        },
     ) { innerPadding ->
         AppNavGraph(
             navController = navController,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         )
     }
 }
-

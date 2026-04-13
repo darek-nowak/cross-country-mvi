@@ -17,33 +17,37 @@ sealed class CountryInfoIntent {
 
 internal sealed class UiCountryInfoState {
     object Loading : UiCountryInfoState()
+
     data class Success(val countryInfo: CountryInfo) : UiCountryInfoState()
+
     object Error : UiCountryInfoState()
 }
+
 @HiltViewModel
-internal class CountryInfoViewModel @Inject constructor(
-    private val countriesRepository: CountriesRepository
-) : ViewModel() {
-    private val _uiState = MutableStateFlow<UiCountryInfoState>(UiCountryInfoState.Loading)
-    val uiCountryInfoState = _uiState.asStateFlow()
+internal class CountryInfoViewModel
+    @Inject
+    constructor(
+        private val countriesRepository: CountriesRepository,
+    ) : ViewModel() {
+        private val _uiCountryInfoState = MutableStateFlow<UiCountryInfoState>(UiCountryInfoState.Loading)
+        val uiCountryInfoState = _uiCountryInfoState.asStateFlow()
 
-
-    private fun fetchCountryInfo(countryName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching { countriesRepository.getCountry(countryName) }
-                .onSuccess { _uiState.value = UiCountryInfoState.Success(it) }
-                .onFailure {
-                    println(it.toString())
-                    _uiState.value = UiCountryInfoState.Error
-                }
+        private fun fetchCountryInfo(countryName: String) {
+            viewModelScope.launch(Dispatchers.IO) {
+                runCatching { countriesRepository.getCountry(countryName) }
+                    .onSuccess { _uiCountryInfoState.value = UiCountryInfoState.Success(it) }
+                    .onFailure {
+                        println(it.toString())
+                        _uiCountryInfoState.value = UiCountryInfoState.Error
+                    }
+            }
         }
-    }
 
-    fun sendIntent(intent: CountryInfoIntent) {
-        when (intent) {
-            is CountryInfoIntent.ScreenReady -> {
-                fetchCountryInfo(intent.countryName)
+        fun sendIntent(intent: CountryInfoIntent) {
+            when (intent) {
+                is CountryInfoIntent.ScreenReady -> {
+                    fetchCountryInfo(intent.countryName)
+                }
             }
         }
     }
-}
