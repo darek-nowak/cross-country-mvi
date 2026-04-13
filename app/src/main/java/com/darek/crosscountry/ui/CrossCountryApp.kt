@@ -16,12 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.darek.crosscountry.navigation.AppDestinations
 import com.darek.crosscountry.navigation.AppNavGraph
-import com.darek.crosscountry.navigation.CountryInfoDestination
+import com.darek.crosscountry.navigation.CountryInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewScreenSizes
@@ -29,15 +30,14 @@ import com.darek.crosscountry.navigation.CountryInfoDestination
 fun CrossCountryApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    val onCountryDetailsScreen = currentRoute == CountryInfoDestination.route
+    val onCountryDetailsScreen = navBackStackEntry?.destination?.hasRoute<CountryInfo>() ?: false
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             if (onCountryDetailsScreen) {
                 TopAppBar(
-                    title = { Text(CountryInfoDestination.title) },
+                    title = { Text("Country info") },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
@@ -60,10 +60,10 @@ fun CrossCountryApp() {
                                     contentDescription = destination.label
                                 )
                             },
-                            label = { Text(destination.label) },
-                            selected = currentRoute == destination.name,
+                            label = { Text("Country details") },
+                            selected = destination.isSelected(navBackStackEntry?.destination),
                             onClick = {
-                                navController.navigate(destination.name) {
+                                destination.navigate(navController) {
                                     popUpTo(navController.graph.findStartDestination().id) {
                                         saveState = true
                                     }

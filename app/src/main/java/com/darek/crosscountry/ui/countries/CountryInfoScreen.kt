@@ -73,7 +73,7 @@ internal fun CountryInfoLoadedContent(
         ) {
             Text(
                 text = countryInfo.flag,
-                fontSize = 120.sp,
+                fontSize = 150.sp,
                 modifier = Modifier.padding(top = 40.dp)
             )
         }

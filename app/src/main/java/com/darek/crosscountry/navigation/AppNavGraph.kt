@@ -8,10 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.darek.crosscountry.ui.countries.CountriesScreen
 import com.darek.crosscountry.ui.countries.CountryInfoScreen
 import com.darek.crosscountry.ui.theme.CrossCountryTheme
@@ -23,27 +22,25 @@ fun AppNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppDestinations.HOME.name,
+        startDestination = Home,
         modifier = modifier
     ) {
-        composable(AppDestinations.HOME.name) {
+        composable<Home> {
             CountriesScreen(
-                onCountryClick = { country ->
-                    navController.navigate(CountryInfoDestination.createRoute(country))
+                onCountryClick = { countryName ->
+                    navController.navigate(route = CountryInfo(countryName))
                 }
             )
         }
-        composable(
-            CountryInfoDestination.route,
-            arguments = listOf(navArgument(CountryInfoDestination.argument) { type = NavType.StringType })
-        ) { backStackEntry ->
-            val country = backStackEntry.arguments?.getString(CountryInfoDestination.argument) ?: ""
-            CountryInfoScreen(country)
+        composable<CountryInfo> { backStackEntry ->
+            val countryInfo: CountryInfo = backStackEntry.toRoute()
+            CountryInfoScreen(countryInfo.countryName)
         }
-        composable(AppDestinations.FAVORITES.name) {
+
+        composable<Favorites> {
             Screen("Favorites")
         }
-        composable(AppDestinations.PROFILE.name) {
+        composable<Profile> {
             Screen("Profile")
         }
     }
