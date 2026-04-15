@@ -4,7 +4,6 @@ import com.darek.crosscountry.data.CountriesRepository
 import com.darek.crosscountry.data.models.Country
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
