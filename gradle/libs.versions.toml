@@ -19,6 +19,8 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 truth = "1.4.5"
 junitJupiter = "5.11.4"
+kotlinxCoroutinesTest = "1.10.1"
+mockk = "1.14.9"
 
 
 [libraries]
@@ -48,6 +50,8 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
