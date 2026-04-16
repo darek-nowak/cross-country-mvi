@@ -24,8 +24,9 @@ internal class CountriesRepository @Inject constructor(
             }
         }
 
-        suspend fun getCountry(countryName: String): CountryInfo =
+        suspend fun getCountry(countryName: String): CountryInfo = with(dispatchersProvider.io()) {
             countriesApi.getCountry(name = countryName)
                 .first()
                 .toCountryInfo()
-    }
+        }
+}

@@ -25,29 +25,29 @@ internal sealed class UiCountryInfoState {
 
 @HiltViewModel
 internal class CountryInfoViewModel
-    @Inject
-    constructor(
-        private val countriesRepository: CountriesRepository,
-    ) : ViewModel() {
-        private val _uiCountryInfoState = MutableStateFlow<UiCountryInfoState>(UiCountryInfoState.Loading)
-        val uiCountryInfoState = _uiCountryInfoState.asStateFlow()
+@Inject constructor(
+    private val countriesRepository: CountriesRepository,
+) : ViewModel() {
+    private val _uiCountryInfoState =
+        MutableStateFlow<UiCountryInfoState>(UiCountryInfoState.Loading)
+    val uiCountryInfoState = _uiCountryInfoState.asStateFlow()
 
-        private fun fetchCountryInfo(countryName: String) {
-            viewModelScope.launch(Dispatchers.IO) {
-                runCatching { countriesRepository.getCountry(countryName) }
-                    .onSuccess { _uiCountryInfoState.value = UiCountryInfoState.Success(it) }
-                    .onFailure {
-                        println(it.toString())
-                        _uiCountryInfoState.value = UiCountryInfoState.Error
-                    }
-            }
-        }
-
-        fun sendIntent(intent: CountryInfoIntent) {
-            when (intent) {
-                is CountryInfoIntent.ScreenReady -> {
-                    fetchCountryInfo(intent.countryName)
+    private fun fetchCountryInfo(countryName: String) {
+        viewModelScope.launch {
+            runCatching { countriesRepository.getCountry(countryName) }.onSuccess {
+                    _uiCountryInfoState.value = UiCountryInfoState.Success(it)
+                }.onFailure {
+                    println(it.toString())
+                    _uiCountryInfoState.value = UiCountryInfoState.Error
                 }
+        }
+    }
+
+    fun sendIntent(intent: CountryInfoIntent) {
+        when (intent) {
+            is CountryInfoIntent.ScreenReady -> {
+                fetchCountryInfo(intent.countryName)
             }
         }
     }
+}
