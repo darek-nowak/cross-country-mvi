@@ -41,7 +41,7 @@ internal class CountriesViewModel
 
         private fun fetchCountries() {
             _uiState.value = UiCountriesState.Loading
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 runCatching { countriesRepository.getCountries() }
                     .onSuccess { _uiState.value = UiCountriesState.Success(it) }
                     .onFailure {
