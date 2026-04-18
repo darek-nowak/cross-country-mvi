@@ -16,7 +16,6 @@ class CoroutineDispatchersExtension constructor(
     val testDispatcher: CoroutineDispatcher = StandardTestDispatcher(),
     val testDispatcherProvider: CoroutineDispatchersProvider = TestCoroutineDispatchersProvider(testDispatcher)
 ) : BeforeEachCallback, AfterEachCallback {
-    private val coroutineDispatcherProvider = TestCoroutineDispatchersProvider(testDispatcher)
 
     override fun beforeEach(context: ExtensionContext) {
         Dispatchers.setMain(testDispatcher)
