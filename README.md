@@ -33,4 +33,7 @@ Verify screenshots:
 ```
 
 ### UI interactive testing
+```bash
+./gradlew connectedAndroidTest
+```
 - action & verification robots
