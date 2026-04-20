@@ -15,7 +15,6 @@
 - CoroutineDispatchersProvider injected to classes
 - google Truth assertions
 - cashapp Turbine for Flow testing
-- Extensions 
 
 ### Screenshots Testing
 - paparazzi lib for testing UI on jvm
