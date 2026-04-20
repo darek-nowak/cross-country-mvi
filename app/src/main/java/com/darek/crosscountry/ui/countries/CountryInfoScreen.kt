@@ -36,13 +36,13 @@ internal fun CountryInfoScreen(
         viewModel.sendIntent(CountryInfoIntent.ScreenReady(countryName))
     }
 
-    CountryInfoContent(
+    CountryInfoScreenContent(
         uiState = uiState,
     )
 }
 
 @Composable
-internal fun CountryInfoContent(uiState: UiCountryInfoState) {
+internal fun CountryInfoScreenContent(uiState: UiCountryInfoState) {
     when (uiState) {
         UiCountryInfoState.Loading -> LoadingIndicator()
         is UiCountryInfoState.Success -> {
@@ -120,9 +120,9 @@ private fun InfoRow(
 
 @Preview(showBackground = true)
 @Composable
-private fun CountryInfoContentLoadedPreview() {
+private fun CountryInfoScreenContentLoadedPreview() {
     CrossCountryTheme {
-        CountryInfoContent(
+        CountryInfoScreenContent(
             UiCountryInfoState.Success(
                 CountryInfo(
                     name = "Poland",
@@ -142,9 +142,9 @@ private fun CountryInfoContentLoadedPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun CountryInfoContentErrorPreview() {
+private fun CountryInfoScreenContentErrorPreview() {
     CrossCountryTheme {
-        CountryInfoContent(
+        CountryInfoScreenContent(
             UiCountryInfoState.Error,
         )
     }
@@ -152,9 +152,9 @@ private fun CountryInfoContentErrorPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun CountryInfoContentLoadingPreview() {
+private fun CountryInfoScreenContentLoadingPreview() {
     CrossCountryTheme {
-        CountryInfoContent(
+        CountryInfoScreenContent(
             UiCountryInfoState.Loading,
         )
     }

@@ -10,6 +10,9 @@
 ## Testing layers
 
 ### Unit Tests
+```shell
+./gradlew test
+```
 - JUnit5 with mockk library 
 - Extension classes for mocking coroutine Dispatchers
 - CoroutineDispatchersProvider injected to classes
@@ -18,6 +21,16 @@
 
 ### Screenshots Testing
 - paparazzi lib for testing UI on jvm
+
+Record screenshots:
+```bash
+./gradlew app:recordPaparazziDebug
+```
+
+Verify screenshots:
+```bash
+./gradlew app:verifyPaparazziDebug
+```
 
 ### UI interactive testing
 - action & verification robots
