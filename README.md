@@ -1,4 +1,4 @@
-# CrossCountry application for demonstratimg clean android architecture with tests
+## CrossCountry app - clean android architecture with tests
 
 ## MVI Architecture with clearly defined layers and their responsibilities:
 - UI Screens
